@@ -6,6 +6,7 @@ import allRoutes from "./routes/index.js";
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 dotenv.config();
 
 app.use("/api/v1", allRoutes);

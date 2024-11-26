@@ -4,7 +4,7 @@ import gameRoutes from "./game.routes.js";
 
 const allRoutes = Router();
 
-allRoutes.post("/user", userRoutes);
-allRoutes.post("/game", gameRoutes);
+allRoutes.use("/user", userRoutes);
+allRoutes.use("/game", gameRoutes);
 
 export default allRoutes;
