@@ -39,14 +39,36 @@ export const drawCard = async (req, res) => {
       user.isLastCardIsDefuse = false;
       console.log(user.cards, "user.cards");
     } else if (card == "defuse") {
+      console.log(index, "index");
       user.cards.splice(index, 1);
       user.isLastCardIsDefuse = true;
+      console.log(user, "user.cards");
     } else if (card == "shuffle") {
+      user.cards.splice(index, 1);
       user.isLastCardIsDefuse = false;
-      user.cards = [];
+      const newCards = uniqueCards();
+      user.cards = newCards;
     } else if (card == "bomb") {
-      user.isLastCardIsDefuse = false;
-      user.cards = [];
+      if (user.isLastCardIsDefuse) {
+        user.cards.splice(index, 1);
+        user.isLastCardIsDefuse = false;
+      } else {
+        user.isLastCardIsDefuse = false;
+        user.cards = [];
+        await user.save();
+        return res
+          .status(200)
+          .json({ success: true, message: "You lost game." });
+      }
+    }
+    console.log(user.cards, "final cards");
+    await user.save();
+    if (user.cards.length == 0) {
+      user.totalGamesWon = user.totalGamesWon++;
+      await user.save();
+      return res
+        .status(200)
+        .json({ success: true, message: "You won the game." });
     }
     return res.status(200).json({ success: true, user });
   } catch (error) {

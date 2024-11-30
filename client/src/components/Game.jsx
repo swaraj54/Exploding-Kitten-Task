@@ -20,6 +20,7 @@ const Game = () => {
       if (response.data.success) {
         setCards(response.data.user.cards);
         setGameStarted(true);
+        setCardIndex();
       }
     } catch (error) {
       console.log(error);
@@ -36,7 +37,14 @@ const Game = () => {
         { index: index, username }
       );
       if (response.data.success) {
-        setCards(response.data.user.cards);
+        if (response.data.message) {
+          alert(response.data.message);
+          setUsername('')
+          setGameStarted(false)
+        } else {
+          setCards(response?.data?.user?.cards);
+        }
+        setCardIndex();
       }
     } catch (error) {
       console.log(error);
@@ -47,7 +55,7 @@ const Game = () => {
     setCardIndex(index);
     setTimeout(() => {
       drawCard(index);
-    }, 2000);
+    }, 500);
   }
   return (
     <div
